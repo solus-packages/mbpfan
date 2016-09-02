@@ -1,0 +1,21 @@
+name       : mbpfan
+version    : 1.9.1
+release    : 1
+source     :
+    - https://github.com/dgraziotin/mbpfan/archive/v1.9.1.tar.gz : a7cf850a393ebfce21427b992436b84cc4b20e1cb8d673d45d2c8b991c69e68c
+license    : GPL-3.0
+component  : system.utils
+summary    : Fan Control Daemon for Mac Books
+description: |
+    Fan-Control-Daemon is a daemon that uses input from coretemp module and sets the fan speed using the applesmc module. This enhanced version assumes any number of processors and fans (max. 10).
+setup      : |
+    %patch -p1 < $pkgfiles/0001-Fix-build.patch
+    %patch -p1 < $pkgfiles/test-case-fix.patch
+    %patch -p1 < $pkgfiles/buffer-overflow.patch
+build      : |
+    %make -j1
+install    : |
+    %make_install -j1
+    install -D -m 00644 mbpfan.service $installdir/usr/lib/systemd/system/mbpfan.service
+    install -D -d -m 00755 $installdir/usr/lib/systemd/system/sysinit.target.wants
+    ln -sv ../mbpfan.service $installdir/usr/lib/systemd/system/sysinit.target.wants/mbpfan.service

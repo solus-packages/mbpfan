@@ -1,0 +1,30 @@
+From ffd07561b5b55093bc45ad4edae30629278d4cec Mon Sep 17 00:00:00 2001
+From: Daniel Graziotin <daniel@ineed.coffee>
+Date: Mon, 29 Aug 2016 10:00:27 +0200
+Subject: [PATCH] [Fix #85] correct test cases for settings
+
+---
+ src/minunit.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/minunit.c b/src/minunit.c
+index 6e6dc59..58af2b5 100644
+--- a/src/minunit.c
++++ b/src/minunit.c
+@@ -151,7 +151,7 @@ static const char *test_config_file()
+ static const char *test_settings()
+ {
+     retrieve_settings("./mbpfan.conf.test1");
+-    mu_assert("min_fan_speed value is not 6200", min_fan_speed == 6200);
++    mu_assert("max_fan_speed value is not 6200", max_fan_speed == 6200);
+     mu_assert("polling_interval is not 1", polling_interval == 1);
+     retrieve_settings("./mbpfan.conf");
+     mu_assert("min_fan_speed value is not 2000", min_fan_speed == 2000);
+@@ -188,6 +188,7 @@ static const char *test_settings_reload()
+ {
+     signal(SIGHUP, handler);
+     retrieve_settings("./mbpfan.conf");
++    printf("Testing the _supplied_ mbpfan.conf (not the one you are using)..\n");
+     mu_assert("min_fan_speed value is not 2000 before SIGHUP", min_fan_speed == 2000);
+     mu_assert("polling_interval is not 7 before SIHUP", polling_interval == 7);
+     raise(SIGHUP);

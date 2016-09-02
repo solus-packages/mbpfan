@@ -1,0 +1,46 @@
+From 12c47c7f498eb819fda7eab83ae836cf2b32712d Mon Sep 17 00:00:00 2001
+From: Ikey Doherty <ikey@solus-project.com>
+Date: Fri, 2 Sep 2016 06:21:12 +0100
+Subject: [PATCH] Fix build
+
+Signed-off-by: Ikey Doherty <ikey@solus-project.com>
+---
+ Makefile       | 7 ++++---
+ mbpfan.service | 1 -
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 6bee6a2..db05569 100644
+--- a/Makefile
++++ b/Makefile
+@@ -59,12 +59,13 @@ tests:
+ 	/usr/sbin/mbpfan -f -v -t
+ 
+ uninstall:
+-	rm /usr/sbin/mbpfan
+-	rm /etc/mbpfan.conf
++	rm $(DESTDIR)/usr/sbin/mbpfan
++	rm $(DESTDIR)/etc/mbpfan.conf
+ 
+ install:
+ 	make
+-	cp $(EXE) /usr/sbin
++	install -D -m 00755 $(EXE) $(DESTDIR)/usr/sbin/mbpfan
++	install -D -m 00644 $(CONF) $(DESTDIR)/etc/$(CONF)
+ 	cp -n $(CONF) /etc
+ 	@echo ""
+ 	@echo "******************"
+diff --git a/mbpfan.service b/mbpfan.service
+index f2983ea..5e77676 100644
+--- a/mbpfan.service
++++ b/mbpfan.service
+@@ -1,6 +1,5 @@
+ [Unit]
+ Description=A fan manager daemon for MacBook Pro
+-After=syslog.target
+ After=sysinit.target
+ 
+ [Service]
+-- 
+2.9.2
+
